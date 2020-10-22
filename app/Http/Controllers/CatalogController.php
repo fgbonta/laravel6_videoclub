@@ -87,6 +87,24 @@ class CatalogController extends Controller
         return redirect('/catalog')
             ->with('mensaje','Película: '.$request->input('titulo').' modificada');
         
-    }    
+    } 
+
+    public function postCreate(Request $request)
+    {
+        $this->validar($request);
+
+        $movie = new Movie();
+
+        $movie->title = $request->input('titulo');
+        $movie->year = $request->input('anio');
+        $movie->director = $request->input('director');
+        $movie->poster = $this->subirImagen($request);
+        $movie->synopsis = $request->input('resumen');
+
+        $movie->save();
+
+        return redirect('/catalog')
+            ->with('mensaje','Película: '.$movie->title.' agregada');
+    }   
    
 }

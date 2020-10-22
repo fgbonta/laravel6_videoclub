@@ -2,7 +2,16 @@
 
 @section('content')
 
-	<h1>Películas</h1>
+	<div id="titulo">
+		<h1>Películas</h1>
+	</div>
+
+	<div id="boton-agregar">
+		<a href="{{ action('CatalogController@getCreate') }}"><img src="./assets/img/add.png" width="28"></a>
+	</div>
+
+	<div id="clearboth"></div>	
+
 	@if( session('mensaje') )
 
 		<div class="alert alert-success">

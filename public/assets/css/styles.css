@@ -1,0 +1,9 @@
+#titulo{
+	float:left;
+}
+#boton-agregar{
+	float:right;
+}
+#clearboth{
+	clear:both;
+}
