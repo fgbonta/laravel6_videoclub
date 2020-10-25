@@ -34,7 +34,15 @@ Route::group(['middleware'=>'auth'],function(){
 
 	Route::get('/catalog/edit/{id}','CatalogController@getEdit');
 
-	Route::put('/catalog/edit','CatalogController@putEdit');	
+	Route::put('/catalog/edit','CatalogController@putEdit');
+
+	Route::get('/catalog/alquilarPelicula/{id}','CatalogController@ConfirmarAlquilarPelicula');
+
+	Route::put('/catalog/alquilarPelicula','CatalogController@alquilarPelicula');
+
+	Route::get('/catalog/devolverPelicula/{id}','CatalogController@ConfirmarDevolverPelicula');
+
+	Route::put('/catalog/devolverPelicula','CatalogController@devolverPelicula');	
 
 });
 

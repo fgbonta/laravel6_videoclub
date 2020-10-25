@@ -105,6 +105,50 @@ class CatalogController extends Controller
 
         return redirect('/catalog')
             ->with('mensaje','Película: '.$movie->title.' agregada');
-    }   
+    }
+
+    public function ConfirmarAlquilarPelicula($id)
+    {
+
+        $movie = Movie::findOrFail($id);
+
+        return view('catalog.confirmarAlquilarPelicula',['movie'=>$movie]);     
+    } 
+
+    public function alquilarPelicula(Request $request)
+    {
+        $id = $request->input('id');
+
+        $movie = Movie::findOrFail($id);
+
+        $movie->rented = 1;
+
+        $movie->save();
+
+        return redirect()->action('CatalogController@getShow',[$id])
+            ->with('mensaje','Película alquilada.');
+    }
+
+    public function ConfirmardevolverPelicula($id)
+    {
+
+        $movie = Movie::findOrFail($id);
+
+        return view('catalog.confirmarDevolverPelicula',['movie'=>$movie]);
+    }  
+
+    public function devolverPelicula(Request $request)
+    {
+        $id = $request->input('id');
+
+        $movie = Movie::findOrFail($id);
+
+        $movie->rented = 0;
+
+        $movie->save();
+
+        return redirect()->action('CatalogController@getShow',[$id])
+            ->with('mensaje','Película devuelta.');
+    }  
    
 }

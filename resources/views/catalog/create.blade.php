@@ -46,5 +46,9 @@
 			</ul>
 		</div>
 	@endif
+
+	{{-- $errors->get('titulo') --}}
+	{{-- $errors->first('titulo') --}}
+	{{-- $errors->has('titulo') --}}
 	
 @endsection
