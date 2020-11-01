@@ -22,6 +22,29 @@ Route::get('/login',function(){
 
 Route::get('/salir','LogoutController@salir');
 
+
+//API publicas
+//Rutas con el prefijo api
+Route::group(['prefix'=>'api'],function(){
+	//Rutas con el prefijo api/v1
+	Route::group(['prefix'=>'v1'],function(){
+		//Rutas con el prefijo api/v1/Catalog
+		Route::get('/catalog','APICatalogController@index');
+	});
+});
+
+//API con autenticacion
+Route::group(['middleware'=>'auth.basic'],function(){
+	//Rutas con el prefijo api
+	Route::group(['prefix'=>'api'],function(){
+		//Rutas con el prefijo api/v1
+		Route::group(['prefix'=>'v1'],function(){
+			//Rutas con el prefijo api/v1/Catalog
+			//Route::get('/catalog','CatalogController@apiV1Catalog');
+		});
+	});
+});
+
 Route::group(['middleware'=>'auth'],function(){
 
 	Route::get('/catalog','CatalogController@getIndex');

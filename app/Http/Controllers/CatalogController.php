@@ -117,6 +117,11 @@ class CatalogController extends Controller
 
     public function alquilarPelicula(Request $request)
     {
+        $request->validate(
+            [
+                'id'=>'integer|min:1'
+            ]);
+
         $id = $request->input('id');
 
         $movie = Movie::findOrFail($id);
@@ -139,6 +144,11 @@ class CatalogController extends Controller
 
     public function devolverPelicula(Request $request)
     {
+        $request->validate(
+            [
+                'id'=>'integer|min:1'
+            ]);
+        
         $id = $request->input('id');
 
         $movie = Movie::findOrFail($id);
@@ -149,6 +159,6 @@ class CatalogController extends Controller
 
         return redirect()->action('CatalogController@getShow',[$id])
             ->with('mensaje','Película devuelta.');
-    }  
+    }    
    
 }

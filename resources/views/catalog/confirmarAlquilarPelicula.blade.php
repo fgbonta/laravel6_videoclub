@@ -31,5 +31,12 @@
 
     </article>
 
+    @if( $errors->has('id') )
+		<div class="alert alert-danger mt-2">
+			<ul>				
+				<li>{{ $errors->first('id') }}</li>				
+			</ul>
+		</div>
+	@endif
 
 @endsection
