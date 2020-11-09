@@ -30,17 +30,19 @@ Route::group(['prefix'=>'api'],function(){
 	Route::group(['prefix'=>'v1'],function(){
 		//Rutas con el prefijo api/v1/Catalog
 		Route::get('/catalog','APICatalogController@index');
+		Route::get('/catalog/show/{id}','APICatalogController@show');
+		
 	});
 });
 
 //API con autenticacion
-Route::group(['middleware'=>'auth.basic'],function(){
+Route::group(['middleware'=>'auth'],function(){
 	//Rutas con el prefijo api
 	Route::group(['prefix'=>'api'],function(){
 		//Rutas con el prefijo api/v1
 		Route::group(['prefix'=>'v1'],function(){
 			//Rutas con el prefijo api/v1/Catalog
-			//Route::get('/catalog','CatalogController@apiV1Catalog');
+			
 		});
 	});
 });
