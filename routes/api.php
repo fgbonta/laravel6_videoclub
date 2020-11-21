@@ -16,3 +16,24 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//API publicas
+//Rutas con el prefijo v1
+Route::group(['prefix'=>'v1'],function(){
+	
+	Route::get('/catalog','APICatalogController@index');
+	Route::get('/catalog/show/{id}','APICatalogController@show');
+	Route::PUT('/catalog/rent','APICatalogController@alquilar');		
+	Route::put('/catalog/return','APICatalogController@devolver');
+
+});
+
+//API con autenticacion
+////Rutas con el prefijo v1
+Route::group(['middleware'=>'auth'],function(){	
+		
+	Route::group(['prefix'=>'v1'],function(){
+		
+			
+	});	
+});
