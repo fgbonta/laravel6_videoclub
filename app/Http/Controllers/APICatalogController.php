@@ -8,7 +8,7 @@ use App\Movie;
 
 class APICatalogController extends Controller
 {
-    //GET listar
+    //GET listar todas
     public function index()
     { 
 
@@ -18,16 +18,25 @@ class APICatalogController extends Controller
 
     } 
    
-    //GET listar una
+    //GET listar una pelicula
     public function show($id)
     {
 
-        $movie = Movie::findOrFail($id);
+        $movie = Movie::find($id);
 
-        return response()->json($movie,200);
+        if($movie)
+        {
+            return response()->json($movie,200);
+        }
+
+        return response()->json([
+            'success'=>false,
+            'message'=>'Película inexistente.'
+        ],409);
+
     }
 
-    //PUT alquilar
+    //PUT alquilar una pelicula
     public function alquilar(Request $request)
     {
         $validator = Validator::make($request->all(),[
@@ -43,28 +52,37 @@ class APICatalogController extends Controller
         }
         else
         {
-            $movie = Movie::findOrFail($request->id);
-            if(!$movie->rented)
-            {
-               $movie->rented = 1;
-               $movie->save();
+            $movie = Movie::find($request->id);
 
-               return response()->json([
-                   'success'=>true,
-                   'message'=>'Película alquilada.'
-               ],200); 
+            if($movie)
+            {
+                if(!$movie->rented)
+                {
+                   $movie->rented = 1;
+                   $movie->save();
+
+                   return response()->json([
+                       'success'=>true,
+                       'message'=>'Película alquilada.'
+                   ],200); 
+                }
+
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'Película no disponible.'
+                ],409);
             }
 
             return response()->json([
                 'success'=>false,
-                'message'=>'Película no disponible.'
-            ],409);
+                'message'=>'Película inexistente.'
+            ],409);            
             
         }      
 
     }
 
-     //PUT devolver
+    //PUT devolver una pelicula
     public function devolver(Request $request)
     {
         $validator = Validator::make($request->all(),[
@@ -80,24 +98,69 @@ class APICatalogController extends Controller
         }
         else
         {
-            $movie = Movie::findOrFail($request->id);
-            if($movie->rented)
-            {
-                $movie->rented = 0;
-                $movie->save();
+            $movie = Movie::find($request->id);
 
+            if($movie)
+            {
+
+                if($movie->rented)
+                {
+                    $movie->rented = 0;
+                    $movie->save();
+
+                    return response()->json([
+                        'success'=>true,
+                        'message'=>'Película devuelta.'
+                    ],200); 
+                }
+                    
                 return response()->json([
-                    'success'=>true,
-                    'message'=>'Película devuelta.'
-                ],200); 
+                    'success'=>false,
+                     'message'=>'Película disponible.'
+                ],409);
+
             }
-                
+
             return response()->json([
                 'success'=>false,
-                 'message'=>'Película disponible.'
-            ],409);
+                'message'=>'Película inexistente.'
+            ],409);   
             
         }
+    }
+
+    //DELETE elimina una pelicula
+    public function destroy(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'id'=>'required|integer|min:1'
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->messages()->first()
+            ],409); 
+        }
+
+        $movie = Movie::find($request->id);
+
+        if($movie)
+        {
+            $movie->delete();
+
+            return response()->json([
+                'success'=>true,
+                'message'=>'Película eliminada.'
+            ],200);
+        }
+
+        return response()->json([
+            'success'=>false,
+            'message'=>'Película inexistente.'
+        ],409);
+        
     }        
 
 }
