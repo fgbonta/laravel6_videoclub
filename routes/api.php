@@ -23,6 +23,8 @@ Route::group(['prefix'=>'v1'],function(){
 	
 	Route::get('/catalog','APICatalogController@index');
 	Route::get('/catalog/show/{id}','APICatalogController@show');
+	Route::post('/catalog','APICatalogController@store');
+	Route::PUT('/catalog/{id}','APICatalogController@update');
 	Route::PUT('/catalog/rent','APICatalogController@alquilar');		
 	Route::put('/catalog/return','APICatalogController@devolver');
 	Route::delete('/catalog/remove','APICatalogController@destroy');

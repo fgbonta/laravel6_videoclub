@@ -161,6 +161,102 @@ class APICatalogController extends Controller
             'message'=>'Película inexistente.'
         ],409);
         
+    }
+
+    private function subirImagen(Request $request)
+    {
+
+        $imagen = 'noDisponible.jpg';
+
+        if($request->has('imagenActual'))
+        {
+            $imagen = $request->input('imagenActual');
+        }
+
+        if($request->file('poster'))
+        {
+            $imagen = time().'.'.$request->file('poster')->clientExtension();
+
+            $request->file('poster')->move(public_path('assets/img'),$imagen);
+
+        }
+
+        return $imagen;
+
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'title'=>'required|min:1|max:150',
+            'year'=>'required|integer|min:1900',
+            'director'=>'required|min:1|max:150',
+            'synopsis'=>'required|min:1|max:1000',
+            'poster'=>'mimes:jpg,jpeg,png,gif,svg,webp|max:1024',
+            'rented'=>'required|integer|min:0|max:1'
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->messages()->first()
+            ],409); 
+        }
+
+        $input = $request->all();
+
+        $input['poster'] = $this->subirImagen($request);        
+
+        Movie::create($input);
+
+        return response()->json([
+            'success'=>true,
+            'message'=>'Película agregada.'
+        ],201);
+
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(),[
+            'title'=>'required|min:1|max:150',
+            'year'=>'required|integer|min:1900',
+            'director'=>'required|min:1|max:150',
+            'synopsis'=>'required|min:1|max:1000',
+            'poster'=>'mimes:jpg,jpeg,png,gif,svg,webp|max:1024',
+            'rented'=>'required|integer|min:0|max:1'
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->messages()->first()
+            ],409); 
+        }
+
+        $input = $request->all();
+
+        $input['poster'] = $this->subirImagen($request);        
+
+        $movie = Movie::find($id);
+
+        if($movie)
+        {
+            $movie->update($input);
+
+            return response()->json([
+                'success'=>true,
+                'message'=>'Película actualizada.'
+            ],200);
+        }
+
+        return response()->json([
+            'success'=>false,
+            'message'=>'Película inexistente.'
+        ],409);
+
     }        
 
 }
