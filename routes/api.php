@@ -17,26 +17,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//API publicas
-//Rutas con el prefijo v1
-Route::group(['prefix'=>'v1'],function(){
-	
-	Route::get('/catalog','APICatalogController@index');
-	Route::get('/catalog/show/{id}','APICatalogController@show');
-	Route::post('/catalog','APICatalogController@store');
-	Route::PUT('/catalog/{id}','APICatalogController@update');
-	Route::PUT('/catalog/rent','APICatalogController@alquilar');		
-	Route::put('/catalog/return','APICatalogController@devolver');
-	Route::delete('/catalog/remove','APICatalogController@destroy');
+Route::post('users','UsuarioController@store');
+Route::post('login','UsuarioController@login');
 
-});
+//API token
+Route::group(['middleware'=>'auth:api'],function(){
 
-//API con autenticacion
-////Rutas con el prefijo v1
-Route::group(['middleware'=>'auth'],function(){	
-		
+	Route::post('logout','UsuarioController@logout');
+
+	//Rutas con el prefijo v1
 	Route::group(['prefix'=>'v1'],function(){
 		
-			
-	});	
+		Route::get('/catalog','APICatalogController@index');
+		Route::get('/catalog/show/{id}','APICatalogController@show');
+		//Route::post('/catalog','APICatalogController@store');
+		//Route::PUT('/catalog/{id}','APICatalogController@update');
+		Route::PUT('/catalog/rent','APICatalogController@alquilar');		
+		Route::put('/catalog/return','APICatalogController@devolver');
+		Route::delete('/catalog/remove','APICatalogController@destroy');
+
+	});
+
 });

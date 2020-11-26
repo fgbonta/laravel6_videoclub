@@ -163,7 +163,7 @@ class APICatalogController extends Controller
         
     }
 
-    private function subirImagen(Request $request)
+    /*private function subirImagen(Request $request)
     {
 
         $imagen = 'noDisponible.jpg';
@@ -257,6 +257,6 @@ class APICatalogController extends Controller
             'message'=>'Película inexistente.'
         ],409);
 
-    }        
+    }   */     
 
 }
